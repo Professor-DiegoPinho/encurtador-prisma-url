@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { nanoid } from "nanoid";
+import { randomBytes } from "node:crypto";
 import httpStatus from "http-status";
 
 const app = express();
@@ -11,7 +11,7 @@ app.post("/shorten", async (req: Request, res: Response) => {
   const { original } = req.body;
 
   const shortUrlSize = 6;
-  const shortUrl = nanoid(shortUrlSize);
+  const shortUrl = randomBytes(shortUrlSize).toString("base64url");
 
   try {
     const url = await prisma.url.create({
